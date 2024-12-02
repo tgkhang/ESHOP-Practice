@@ -2,8 +2,21 @@
 
 const controller= {};
 
-controller.showHomepage=  (req,res)=>{
-    res.render('index');
+const models= require('../models')
+
+controller.showHomepage= async (req,res)=>{
+    //c2
+    const categories= await models.Category.findAll();
+    const secondArray = categories.splice(2,2);
+    const thirdArray= categories.splice(1,1);
+    res.locals.categoryArray=[categories,secondArray,thirdArray];
+
+    //c1
+    const Brand=models.Brand;
+    const brands=await Brand.findAll();
+
+    console.log(brands);
+    res.render('index',{brands : brands});
 }
 
 controller.showPage =(req,res, next)=>{

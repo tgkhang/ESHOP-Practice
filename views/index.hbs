@@ -59,36 +59,18 @@
         <div class="category">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="category-img">
-                            <img src="img/category-1.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
+                    {{#each categoryArray}}
+                        <div class="col-md-4">
+                            {{#each this}}
+                            <div class="category-img">
+                                <img src="{{imagePath}}" />
+                                <a class="category-name" href="">
+                                    <h2>{{name}}</h2>
+                                </a>
+                            </div>
+                            {{/each}}
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="category-img">
-                            <img src="img/category-3.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
-                        </div>
-                        <div class="category-img">
-                            <img src="img/category-4.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="category-img">
-                            <img src="img/category-2.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
-                        </div>
-                    </div>
+                    {{/each}}
                 </div>
             </div>
         </div>
@@ -405,12 +387,9 @@
                     </p>
                 </div>
                 <div class="brand-slider">
-                    <div class="brand-item"><img src="img/brand-1.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-2.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-3.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-4.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-5.png" alt=""></div>
-                    <div class="brand-item"><img src="img/brand-6.png" alt=""></div>
+                    {{#each brands}}
+                        <div class="brand-item"><img src="{{imagePath}}" alt="{{name}}"></div>
+                    {{/each}}
                 </div>
             </div>
         </div>
