@@ -5,6 +5,23 @@ const controller= {};
 const models= require('../models')
 
 controller.showHomepage= async (req,res)=>{
+    //rêcnt product
+    const recentProducts= await models.Product.findAll({
+        attributes: ['id','name','imagePath','stars','price','oldPrice','createdAt'],
+        order:[['createdAt','DESC']],
+        limit:10,
+    });
+    res.locals.recentProducts=recentProducts;
+
+    //best feature
+    const featuredProducts= await models.Product.findAll({
+        attributes: ['id','name','imagePath','stars','price','oldPrice'],
+        order:[['stars','DESC']],
+        limit:10,
+    });
+    console.log(featuredProducts.attributes);
+    res.locals.featuredProducts= featuredProducts;
+
     //c2
     const categories= await models.Category.findAll();
     const secondArray = categories.splice(2,2);
@@ -15,7 +32,7 @@ controller.showHomepage= async (req,res)=>{
     const Brand=models.Brand;
     const brands=await Brand.findAll();
 
-    console.log(brands);
+    //console.log(brands);
     res.render('index',{brands : brands});
 }
 
