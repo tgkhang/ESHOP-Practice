@@ -1,21 +1,10 @@
+'use strict'
 let controller= {};
 const { where } = require('sequelize');
 const models=require('../models');
 
 
-
-controller.show=async (req,res)=> {
-
-    //take the input category from client
-    let category= isNaN(req.query.category) ? 0: parseInt(req.query.category);
-
-    //take the input category from client
-    let brand= isNaN(req.query.brand) ? 0: parseInt(req.query.brand);
-    
-    //take the input category from client
-    let tag= isNaN(req.query.tag) ? 0: parseInt(req.query.tag);
-
-
+controller.getData= async(req,res,next)=>{
     let brands=await models.Brand.findAll({
         include: [{
             model: models.Product
@@ -35,6 +24,39 @@ controller.show=async (req,res)=> {
         }]
     });
     res.locals.categories=categories;
+    next();
+}
+controller.show=async (req,res)=> {
+
+    //take the input category from client
+    let category= isNaN(req.query.category) ? 0: parseInt(req.query.category);
+
+    //take the input category from client
+    let brand= isNaN(req.query.brand) ? 0: parseInt(req.query.brand);
+    
+    //take the input category from client
+    let tag= isNaN(req.query.tag) ? 0: parseInt(req.query.tag);
+
+
+    // let brands=await models.Brand.findAll({
+    //     include: [{
+    //         model: models.Product
+    //     }]
+    // })
+    // res.locals.brands=brands;
+
+    // //tagname
+    // let tags=await models.Tag.findAll();
+    // res.locals.tags=tags;
+     
+
+    // //join table categories
+    // let categories= await models.Category.findAll({
+    //     include: [ {
+    //         model:models.Product
+    //     }]
+    // });
+    // res.locals.categories=categories;
 
 
     let options= {
@@ -60,5 +82,33 @@ controller.show=async (req,res)=> {
     res.render('product-list')
 }
 
+controller.showDetails= async(req,res)=>{
+    let id= isNaN(req.params.id)? 0: parseInt(req.params.id);
+
+
+    //findByprimarykey
+    //let product= await models.Product.findByPk(id);
+    let product= await models.Product.findOne({
+        attributes: ['id','name','stars','price','oldPrice','summary','description','specification'],
+        where: {
+            id:id,
+        },
+        include:[{
+            model:models.Image,
+            attributes: ['name','imagePath'],
+        },
+        {
+            model:models.Review,
+            attributes: ['id','review','stars','createdAt'],
+            include: [{
+                model: models.User,
+                attributes: ['lastName','firstName'],
+            }]
+        }]
+    })
+    res.locals.product=product;
+    res.render('product-detail')
+
+}
 
 module.exports= controller;
