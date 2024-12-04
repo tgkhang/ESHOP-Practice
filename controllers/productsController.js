@@ -2,7 +2,8 @@
 let controller= {};
 const { where } = require('sequelize');
 const models=require('../models');
-
+const sequelize= require('sequelize');
+const Op=sequelize.Op;
 
 controller.getData= async(req,res,next)=>{
     let brands=await models.Brand.findAll({
@@ -37,6 +38,13 @@ controller.show=async (req,res)=> {
     //take the input category from client
     let tag= isNaN(req.query.tag) ? 0: parseInt(req.query.tag);
 
+
+    //search
+    let keyword= req.query.keyword || '';
+
+    //sort
+    //let sort= req.query.sort ||'price';
+    let sort= ['price','newest','popular'].includes(req.query.sort) ? req.query.sort: 'price';
 
     // let brands=await models.Brand.findAll({
     //     include: [{
@@ -75,6 +83,30 @@ controller.show=async (req,res)=> {
             where: {id:tag}
         }]
     }
+    // console.log(keyword);
+    if(keyword.trim()!=''){
+        options.where.name = {
+            [Op.iLike]: `%${keyword}%`,
+        }
+    }
+    switch(sort){
+        case 'newest':
+            options.order= [['createdAt','DESC']];
+            break;
+        case 'popular':
+            options.order= [['stars','DESC']];
+            break;
+        default:  
+        options.order= [['price','ASC']];
+    }
+    //console.log(req.originalUrl);
+    res.locals.sort=sort;
+    res.locals.originalUrl =removeParam('sort',req.originalUrl) ;
+
+    //sort in main page , adding ? to url
+    if(Object.keys(req.query).length==0){
+        res.locals.originalUrl= res.locals.originalUrl+"?"
+    }
 
 
     let products= await models.Product.findAll(options);
@@ -109,6 +141,25 @@ controller.showDetails= async(req,res)=>{
     res.locals.product=product;
     res.render('product-detail')
 
+}
+
+
+function removeParam(key, sourceURL) {
+    var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+    if (queryString !== "") {
+        params_arr = queryString.split("&");
+        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+            param = params_arr[i].split("=")[0];
+            if (param === key) {
+                params_arr.splice(i, 1);
+            }
+        }
+        if (params_arr.length) rtn = rtn + "?" + params_arr.join("&");
+    }
+    return rtn;
 }
 
 module.exports= controller;
