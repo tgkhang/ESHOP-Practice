@@ -45,7 +45,7 @@ controller.show=async (req,res)=> {
     //sort
     //let sort= req.query.sort ||'price';
     let sort= ['price','newest','popular'].includes(req.query.sort) ? req.query.sort: 'price';
-
+    let page= isNaN(req.query.page)?1: Math.max(1,parseInt(req.query.page));
     // let brands=await models.Brand.findAll({
     //     include: [{
     //         model: models.Product
@@ -108,9 +108,21 @@ controller.show=async (req,res)=> {
         res.locals.originalUrl= res.locals.originalUrl+"?"
     }
 
+    //pagination
+    const limit =6;
+    options.limit=limit;
+    options.offset= limit * (page-1);
 
-    let products= await models.Product.findAll(options);
-    res.locals.products= products;
+    let {rows,count }= await models.Product.findAndCountAll(options);
+    res.locals.pagination ={
+        page:page,
+        limit:limit,
+        totalRows: count,
+        queryParams: req.query
+    }
+
+    //let products= await models.Product.findAll(options);
+    res.locals.products= rows;//products
     res.render('product-list')
 }
 
