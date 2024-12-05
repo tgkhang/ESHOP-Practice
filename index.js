@@ -9,6 +9,20 @@ const expressHandlebars= require('express-handlebars');
 const {createStarList}= require('./controllers/handlebarsHelper')
 const {createPagination} = require('express-handlebars-paginate');
 const session=require('express-session');
+
+//redis
+const {RedisStore} = require("connect-redis")
+const {createClient}= require('redis');
+let redisClient= createClient({
+    url:'rediss://red-ct8ttb8gph6c73di5qag:AYkXdNGFp7TGYoXGgQgxqEPLD1zUVXQ5@singapore-redis.render.com:6379'
+})
+redisClient.connect().catch(console.error)
+
+let redisStore = new RedisStore({
+    client: redisClient,
+    prefix: "myapp:",
+  })
+
 const port=process.env.PORT || 3000;
 
 //static folder
@@ -45,6 +59,7 @@ app.use(express.urlencoded({extended:false}));
 //session
 app.use(session({
     secret:'S3cret',
+    store: redisStore,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -52,6 +67,7 @@ app.use(session({
         maxAge: 20*60 *1000 //20min
     }
 }));
+
 
 //middleware create shop bag 
 app.use((req,res,next) => {
