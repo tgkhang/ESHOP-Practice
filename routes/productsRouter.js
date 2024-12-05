@@ -13,5 +13,6 @@ router.get('/:id',controller.getData,controller.showDetails);
 router.post('/cart',cartController.add)
 //api
 router.put('/cart',cartController.update);
-
+router.delete('/cart',cartController.remove)
+router.delete('/cart/all',cartController.clear);
 module.exports= router;
