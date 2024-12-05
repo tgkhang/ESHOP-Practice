@@ -14,7 +14,12 @@ const session=require('express-session');
 const {RedisStore} = require("connect-redis")
 const {createClient}= require('redis');
 let redisClient= createClient({
-    url:'rediss://red-ct8ttb8gph6c73di5qag:AYkXdNGFp7TGYoXGgQgxqEPLD1zUVXQ5@singapore-redis.render.com:6379'
+
+    //internal link for server not run in local hosst any more
+    url:'redis://red-ct8ttb8gph6c73di5qag:6379'
+
+    //external link for local host
+    //url:'rediss://red-ct8ttb8gph6c73di5qag:AYkXdNGFp7TGYoXGgQgxqEPLD1zUVXQ5@singapore-redis.render.com:6379'
 })
 redisClient.connect().catch(console.error)
 
