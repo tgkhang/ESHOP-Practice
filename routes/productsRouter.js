@@ -11,5 +11,7 @@ router.get('/:id',controller.getData,controller.showDetails);
 
 //api cart
 router.post('/cart',cartController.add)
+//api
+router.put('/cart',cartController.update);
 
 module.exports= router;
