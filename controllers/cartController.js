@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 let controller= {};
 
@@ -14,6 +14,10 @@ controller.add= async(req,res)=> {
         req.session.cart.add(product,quantity);
     }
     return res.json({quantity: req.session.cart.quantity});
+}
+controller.show= async (req,res)=>{
+    res.locals.cart= req.session.cart.getCart();
+    return res.render('cart');
 }
 
 module.exports= controller;
