@@ -1,5 +1,5 @@
 {
-  "use_env_variable":"POSTGRESQL_URL",
+  
   "development": {
     "username": "admin",
     "password": "mZkLcQfBhLMIajBMMdDAisjfdK9TXgrF",
@@ -21,10 +21,7 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "admin",
-    "password": "mZkLcQfBhLMIajBMMdDAisjfdK9TXgrF",
-    "database": "eshop_z1ga",
-    "host": "dpg-ct8tgim8ii6s73cg9v1g-a.singapore-postgres.render.com",
+    "use_env_variable":"POSTGRESQL_URL",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
