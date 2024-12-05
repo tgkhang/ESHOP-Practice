@@ -1,6 +1,7 @@
 //ensure do not use var that not declare
 'use strict';
 
+require('dotenv').config();
 
 const express= require('express');
 const app=express();
@@ -14,9 +15,11 @@ const session=require('express-session');
 const {RedisStore} = require("connect-redis")
 const {createClient}= require('redis');
 let redisClient= createClient({
+    //dotenv
+    url : process.env.REDIS_URL
 
     //internal link for server not run in local hosst any more
-    url:'redis://red-ct8ttb8gph6c73di5qag:6379'
+    //url:'redis://red-ct8ttb8gph6c73di5qag:6379'
 
     //external link for local host
     //url:'rediss://red-ct8ttb8gph6c73di5qag:AYkXdNGFp7TGYoXGgQgxqEPLD1zUVXQ5@singapore-redis.render.com:6379'
@@ -63,7 +66,8 @@ app.use(express.urlencoded({extended:false}));
 
 //session
 app.use(session({
-    secret:'S3cret',
+    //secret:'S3cret',
+    secret:process.env.SESSION_SECRET,
     store: redisStore,
     resave: false,
     saveUninitialized: false,
