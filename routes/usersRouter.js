@@ -6,4 +6,6 @@ const controller = require('../controllers/usersController');
 
 router.get('/checkout', controller.checkout);
 
+router.post('/placeorders',controller.placeorders);
+
 module.exports= router;
