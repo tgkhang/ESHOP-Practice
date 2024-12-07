@@ -26,6 +26,12 @@ let redisClient= createClient({
 })
 redisClient.connect().catch(console.error)
 
+
+//passport
+const passport = require('./controllers/passport');
+const flash = require('connect-flash');
+
+
 let redisStore = new RedisStore({
     client: redisClient,
     prefix: "myapp:",
@@ -77,19 +83,29 @@ app.use(session({
     }
 }));
 
+//passport configuration
+app.use(passport.initialize());
+app.use(passport.session());
+
+//connect flash configuration
+app.use(flash());
+
 
 //middleware create shop bag 
 app.use((req,res,next) => {
     let Cart =require('./controllers/cart')
     req.session.cart= new Cart(req.session.cart ? req.session.cart : {});
     res.locals.quantity= req.session.quantity;
+    res.locals.isLoggedIn = req.isAuthenticated();
+    console.log("Is Authenticated:", req.isAuthenticated());
     next();
 });
 
 //route
 app.use('/',require('./routes/indexRouter'))
 
-app.use('/products',require('./routes/productsRouter'))
+app.use('/products',require('./routes/productsRouter'));
+app.use('/users',require('./routes/authRouter')); /// xác thực rồi mới xử lí user router
 app.use('/users',require('./routes/usersRouter'));
 
 app.use((req,res,next)=>{

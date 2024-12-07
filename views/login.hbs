@@ -23,37 +23,49 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <div class="login-form">
-          <div class="row">
-            <div class="col-md-6">
-              <label>E-mail / Username</label>
-              <input
-                class="form-control"
-                type="text"
-                placeholder="First Name"
-              />
-            </div>
-            <div class="col-md-6">
-              <label>Password</label>
-              <input class="form-control" type="text" placeholder="Last Name" />
-            </div>
-            <div class="col-md-12">
-              <div class="custom-control custom-checkbox">
+        <form action="/users/login" method="post">
+          <div class="login-form">
+            <div class="row">
+              <div class="col-md-6">
+                <label>E-mail / Username</label>
                 <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="newaccount"
+                  class="form-control"
+                  type="email"
+                  placeholder="Email"
+                  name="email" required
+                  pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                 />
-                <label class="custom-control-label" for="newaccount">Keep me
-                  signed in</label>
               </div>
-            </div>
-            <div class="col-md-12">
-              <button class="btn">Submit</button>
+              <div class="col-md-6">
+                <label>Password</label>
+                <input class="form-control" type="password" pattern=".{8,}" required placeholder="Password" name="password"/>
+              </div>
+              <div class="col-md-12">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="newaccount" name="keepSignedIn"
+                  />
+                  <label class="custom-control-label" for="newaccount">Keep me
+                    signed in</label>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <button class="btn">Submit</button>
+              </div>
+              {{#if loginMessage}}
+              <div class="col md-12">
+                <div class="p-3 mt-3 alert-warning">
+                  {{{loginMessage}}}
+                </div>
+              </div>
+              {{/if }}
             </div>
           </div>
-        </div>
+        </form>
       </div>
+    </div>
 
       <div class="col-md-6">
         <div class="register-form">

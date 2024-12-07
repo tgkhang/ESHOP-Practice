@@ -1,24 +1,17 @@
 {
-  
   "development": {
-    "username": "admin",
-    "password": "mZkLcQfBhLMIajBMMdDAisjfdK9TXgrF",
-    "database": "eshop_z1ga",
-    "host": "dpg-ct8tgim8ii6s73cg9v1g-a.singapore-postgres.render.com",
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
-      }
-    }
+    "username": "postgres",
+    "password": "123",
+    "database": "eshop",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
+    "username": "postgres",
+    "password": "123",
+    "database": "eshop",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "production": {
     "use_env_variable":"POSTGRESQL_URL",
