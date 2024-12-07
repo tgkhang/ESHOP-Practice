@@ -11,7 +11,7 @@ controller.show= (req,res) => {
 controller.login = (req, res, next) => {
     // Extracting the 'keepSignedIn' value from the request body
     let keepSignedIn = req.body.keepSignedIn;
-
+    let cart= req.session.cart;
     // Authenticate using the 'local-login' strategy
     passport.authenticate('local-login', (error, user) => {
         // If there is an error during authentication, pass it to the next middleware
@@ -33,15 +33,17 @@ controller.login = (req, res, next) => {
 
             // Set the session cookie expiration based on 'keepSignedIn'
             req.session.cookie.maxAge = keepSignedIn ? (24 * 60 * 60 * 1000) : null;
-
+            req.session.cart=cart;
             // Redirect the user to their account page after successful login
             return res.redirect('/users/my-account');
         });
     })(req, res, next); // Passing req, res, and next to the authenticate middleware
 };
 controller.logout = (req, res, next) => {
+    let cart=req.session.cart;
     req.logout((error) => {
         if(error) {return next(error);}
+        req.session.cart=cart;
     res.redirect('/');
     });
 }
