@@ -8,7 +8,7 @@ const { add } = require('./cartController');
 controller.checkout= async (req,res) => {
     if(req.session.cart.quatity>0)
     {
-        let userId=1;
+        let userId=req.user.id;
         res.locals.addresses= await models.Address.findAll({where: {userId}});
 
 
@@ -19,7 +19,7 @@ controller.checkout= async (req,res) => {
     
 }
 controller.placeorders = async(req,res) => {
-    let userId=1;
+    let userId=req.user.id;
 
     //let {addressId,payment} = req.body;
     let addressId = isNaN(req.body.addressId) ? 0 : parseInt(req.body.addressId);
@@ -58,7 +58,7 @@ controller.placeorders = async(req,res) => {
 
 async function saveOrders(req,res,status)
 {
-    let userId=1;
+    let userId=req.user.id;
     let {items,...other}= req.session.cart.getCart()
     let order=  await models.Order.create({
         userId,
