@@ -68,7 +68,7 @@ app.set('view engine','hbs');
 
 //cau hinh read post data form body
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({extended:true}));
 
 //session
 app.use(session({

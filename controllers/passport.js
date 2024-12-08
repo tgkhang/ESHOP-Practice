@@ -57,4 +57,36 @@ passport.use('local-login',new LocalTrategy({
     }
 }));
 
+// register
+passport.use('local-register',new LocalTrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true// cho phép truền vào call back để kiểm tra xem userr login chưa
+}, async(req,email,password,done)=>{
+    if(email){
+        email=email.toLowerCase();// lowercase
+    }
+    if(req.user){return done(null,req.user);}
+    try{
+        let user= await models.User.findOne({ where:{email:email}});
+        if(user){
+            return done(null, false, req.flash('registerMessage','Email already exists!'));
+        }
+
+        user= await models.User.create({
+            email: email,
+            password: bcrypt.hashSync(password,bcrypt.genSaltSync(8)),
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            mobile: req.body.mobile,
+        });
+        done(null,false,req.flash('registerMessage','You have registerd sucessfull please login'));
+
+    }catch(error){
+       // console.error('Error during login:', error);
+        done(error);
+    }
+}));
+
+
 module.exports =passport;
